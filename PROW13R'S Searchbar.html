@@ -109,12 +109,10 @@
         </div>
         
         <div class="items-container" id="items-container">
-            <!-- Random anime characters will be populated here -->
         </div>
     </div>
 
     <script>
-        // Array of random anime characters
         const characters = [
             "Naruto Uzumaki", "Sasuke Uchiha", "Goku", "Vegeta", "Luffy", "Zoro", 
             "Ichigo Kurosaki", "Light Yagami", "Eren Yeager", "Mikasa Ackerman", 
@@ -131,8 +129,6 @@
             "Yuno Gasai", "Yukiteru Amano", "Minene Uryuu", "Armin Arlert", 
             "Levi Ackerman", "Erwin Smith", "Historia Reiss", "Armin Arlert"
         ];
-
-        // Function to display all items initially
         function displayItems(items = characters) {
             const container = document.getElementById('items-container');
             container.innerHTML = '';
@@ -145,10 +141,8 @@
                 container.appendChild(div);
             });
         }
-
-        // Function to filter items based on search input
         function filterItems() {
-            const searchInput = document.getElementById('char-search').value.toLowerCase();
+            const searchInput = document.getElementById('char-search').value.toLowerCase().trim();
             const items = document.querySelectorAll('.item');
             let visibleCount = 0;
 
@@ -162,7 +156,6 @@
                 }
             });
 
-            // Show/hide no results message
             const container = document.getElementById('items-container');
             let noResults = container.querySelector('.no-results');
             
@@ -178,16 +171,14 @@
             }
         }
 
-        // Function to clear search
         function clearSearch() {
             document.getElementById('char-search').value = '';
             displayItems();
             const noResults = document.querySelector('.no-results');
             if (noResults) noResults.remove();
         }
-
-        // Initialize with all items
         displayItems();
     </script>
 </body>
 </html>
+
