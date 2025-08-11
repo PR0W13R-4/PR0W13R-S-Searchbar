@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Search Portal</title>
+    <style>
+    body {
+      margin: 0;
+      background:url(../../../Downloads/wp5286997-jotaro-kujo-vs-dio-wallpapers.png);
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-family: Arial, sans-serif;
+    }
+    
+    .search-container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    h1 {
+      color: #fff;
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    
+    #char-search {
+      flex: 1;
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .search-btn {
+      padding: 15px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background: #ff4757;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .search-btn:hover {
+      background: #ff3838;
+    }
+    
+    .items-container {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 20px;
+    }
+    
+    .item {
+      background: rgba(255, 255, 255, 0.1);
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 10px;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .item:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .item.hidden {
+      display: none;
+    }
+    
+    .no-results {
+      color: #ff4757;
+      font-style: italic;
+      margin-top: 20px;
+    }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <h1>Anime Character Search</h1>
+        <div class="search-wrapper">
+            <input type="text" id="char-search" placeholder="Search for characters..." onkeyup="filterItems()" />
+            <button class="search-btn" onclick="clearSearch()">Clear</button>
+        </div>
+        
+        <div class="items-container" id="items-container">
+            <!-- Random anime characters will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        // Array of random anime characters
+        const characters = [
+            "Naruto Uzumaki", "Sasuke Uchiha", "Goku", "Vegeta", "Luffy", "Zoro", 
+            "Ichigo Kurosaki", "Light Yagami", "Eren Yeager", "Mikasa Ackerman", 
+            "Deku", "Bakugo", "Tanjiro Kamado", "Nezuko Kamado", "Gojo Satoru", 
+            "Itachi Uchiha", "Kakashi Hatake", "Sakura Haruno", "Hinata Hyuga", 
+            "Gon Freecss", "Killua Zoldyck", "Hisoka", "Kurapika", "Leorio", 
+            "Edward Elric", "Alphonse Elric", "Roy Mustang", "Riza Hawkeye", 
+            "Spike Spiegel", "Faye Valentine", "Jet Black", "Ein", "Vicious", 
+            "Shinji Ikari", "Rei Ayanami", "Asuka Langley", "Misato Katsuragi", 
+            "Kirito", "Asuna", "Shiro", "Sora", "Jotaro Kujo", "Dio Brando", 
+            "Joseph Joestar", "Josuke Higashikata", "Giorno Giovanna", 
+            "Monkey D. Dragon", "Shanks", "Whitebeard", "Ace", "Sabo", 
+            "Rukia Kuchiki", "Renji Abarai", "Byakuya Kuchiki", "Kenpachi Zaraki", 
+            "Yuno Gasai", "Yukiteru Amano", "Minene Uryuu", "Armin Arlert", 
+            "Levi Ackerman", "Erwin Smith", "Historia Reiss", "Armin Arlert"
+        ];
+
+        // Function to display all items initially
+        function displayItems(items = characters) {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+            
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.textContent = item;
+                div.setAttribute('data-name', item.toLowerCase());
+                container.appendChild(div);
+            });
+        }
+
+        // Function to filter items based on search input
+        function filterItems() {
+            const searchInput = document.getElementById('char-search').value.toLowerCase();
+            const items = document.querySelectorAll('.item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const itemName = item.getAttribute('data-name');
+                if (itemName.includes(searchInput)) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            // Show/hide no results message
+            const container = document.getElementById('items-container');
+            let noResults = container.querySelector('.no-results');
+            
+            if (visibleCount === 0 && searchInput !== '') {
+                if (!noResults) {
+                    noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.textContent = 'No characters found matching your search';
+                    container.appendChild(noResults);
+                }
+            } else if (noResults) {
+                noResults.remove();
+            }
+        }
+
+        // Function to clear search
+        function clearSearch() {
+            document.getElementById('char-search').value = '';
+            displayItems();
+            const noResults = document.querySelector('.no-results');
+            if (noResults) noResults.remove();
+        }
+
+        // Initialize with all items
+        displayItems();
+    </script>
+</body>
+</html>
